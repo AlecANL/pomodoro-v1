@@ -1,6 +1,10 @@
-import { CircleIcon } from '@components/icons/icons.tsx'
 import { useEffect, useState } from 'react'
-import './App.css'
+import { GlobalStyles } from '@components/global-styles.styled.tsx'
+import timeDefaultJson from '@data/time-default.json'
+import { AppStyled, FooterTimerStyled, TimerButton, TimerLabel, TimerSectionStyled } from '@/app.styled.tsx'
+import { Tab } from '@components/tab/tab.tsx'
+import { CircleIcon } from '@components/icons/icons.tsx'
+import { IconSetting } from '@components/icons/setting.tsx'
 
 function App () {
   const [currentTime, setCurrentTime] = useState(1 * 60)
@@ -38,17 +42,32 @@ function App () {
   }
 
   const label = timeoutLabel()
+  const textLabel = start ? 'Pause' : 'Start'
+  const text = start && currentTime <= 0 ? 'Restart' : textLabel
 
   return (
     <>
-      <button onClick={toggleStar}>
-        <span> {label} </span>
-        <CircleIcon
-          currentTime={currentTime}
-          time={1}
-          stroke={currentStroke}
-        />
-      </button>
+      <GlobalStyles/>
+      <AppStyled>
+        <Tab timeList={timeDefaultJson}/>
+        <TimerSectionStyled>
+          <TimerButton onClick={toggleStar}>
+            <TimerLabel>
+              <h2> {label} </h2>
+              <span> {text} </span>
+            </TimerLabel>
+            <CircleIcon
+              currentTime={currentTime}
+              time={1}
+              stroke={currentStroke}
+            />
+          </TimerButton>
+        </TimerSectionStyled>
+        <FooterTimerStyled>
+          <IconSetting/>
+        </FooterTimerStyled>
+      </AppStyled>
+
     </>
   )
 }

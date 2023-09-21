@@ -15,7 +15,7 @@ export const CircleIcon = (props: Props) => {
   function handleProgress (elementRef: RefObject<SVGCircleElement>) {
     if (elementRef.current == null) {
       return {
-        strokeDasharray: '753.982, 753.982',
+        strokeDasharray: '816.8140899333462 816.8140899333462',
         strokeDashoffset: '0'
       }
     }
@@ -50,7 +50,7 @@ export const CircleIcon = (props: Props) => {
           strokeWidth="8"
           strokeLinecap="round"
           fill="transparent"
-          r="120"
+          r="130"
           cx="50%"
           cy="50%"
         ></circle>
