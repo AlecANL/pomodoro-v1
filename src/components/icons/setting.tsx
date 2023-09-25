@@ -13,3 +13,13 @@ export const IconSetting = () => {
     </>
   )
 }
+
+export const IconClose = () => {
+  return (
+    <svg width="14" height="14" fill="none">
+      <path fill="#1E213F" fillRule="evenodd"
+            d="M13.364 2.05 11.95.636 7 5.586 2.05.636.636 2.05 5.586 7l-4.95 4.95 1.414 1.414L7 8.414l4.95 4.95 1.414-1.414L8.414 7l4.95-4.95Z"
+            clipRule="evenodd" opacity=".5"/>
+    </svg>
+  )
+}

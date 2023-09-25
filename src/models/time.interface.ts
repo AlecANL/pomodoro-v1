@@ -1,5 +1,14 @@
-export interface Time {
+export interface Settings {
   id: string
   name: string
-  value: number
+  type: string
+  control: string
+  items: SettingItem[]
+}
+
+export interface SettingItem {
+  id: string
+  name: string
+  value: number | string
+  label?: string
 }

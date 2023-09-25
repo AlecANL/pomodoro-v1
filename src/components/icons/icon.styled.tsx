@@ -1,7 +1,10 @@
 import styled from 'styled-components'
 
 export const CircleIconStyled = styled.svg`
-  stroke: ${props => props.stroke};
+  stroke: var(--current-color);
+  stroke-dasharray: 816.8140899333462 816.8140899333462;
+  stroke-dashoffset: 0;
+
 
   circle {
     transform-origin: center;

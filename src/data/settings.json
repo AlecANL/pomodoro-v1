@@ -1,0 +1,74 @@
+[
+  {
+    "id": "6ec9204b-13de-46e5-af63-ff36105c2743",
+    "name": "time (minutes)",
+    "type": "inputControl",
+    "control": "timeList",
+    "items": [
+      {
+        "id": "ef6c2bf2-c02c-462c-8a6a-334c054383ba",
+        "name": "pomodoro",
+        "label": "pomodoro",
+        "value": 25
+      },
+      {
+        "id": "df27d9e5-0bfd-4451-8fa8-35ea9e9a0f84",
+        "name": "short break",
+        "label": "shortBreak",
+        "value": 5
+      },
+      {
+        "id": "0e1ef76e-f464-4702-bf37-5e93ce0ed4d9",
+        "name": "long break",
+        "label": "longBreak",
+        "value": 15
+      }
+    ]
+  },
+  {
+    "id": "ca20b5b3-a1fa-4d80-9f05-6a32e2463af1",
+    "name": "font",
+    "type": "fontControl",
+    "control": "fontOption",
+    "items": [
+      {
+        "id": "dd200166-d1cc-4faa-b728-767e101e796b",
+        "name": "kumbhSlab",
+        "value": "kumbhSlab"
+      },
+      {
+        "id": "0b22181d-e814-4a65-af9a-a5323594ca8e",
+        "name": "spaceMono",
+        "value": "spaceMono"
+      },
+      {
+        "id": "eb6bff83-85f3-403c-a429-d09829b163fb",
+        "name": "robotoSlab",
+        "value": "robotoSlab"
+      }
+    ]
+  },
+  {
+    "id": "2b2c2201-fa00-44b2-a7c3-d17930c4232a",
+    "name": "color",
+    "type": "colorControl",
+    "control": "colorOption",
+    "items": [
+      {
+        "id": "e22393e5-6159-4b1d-985e-c21709216dff",
+        "name": "radical red",
+        "value": "radical-red"
+      },
+      {
+        "id": "e3ec7e65-1e6d-493f-8d6c-7b34b402613e",
+        "name": "magenta",
+        "value": "magenta"
+      },
+      {
+        "id": "b8c942df-8b4a-4993-b3b8-b59483973904",
+        "name": "cyan",
+        "value": "cyan"
+      }
+    ]
+  }
+]

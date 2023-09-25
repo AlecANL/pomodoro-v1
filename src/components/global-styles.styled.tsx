@@ -14,6 +14,7 @@ export const GlobalStyles = createGlobalStyle`
     --haiti: #161932;
     --topaz: #7a748c;
     --santas-grey: #a7a2b2;
+    --light-gray: #e3e1e1;
 
     --currentFont: ${FONT_FAMILY_NAMES.KUMBH_SLAB};
     --current-color: var(--radical-red);

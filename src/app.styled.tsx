@@ -5,7 +5,7 @@ export const TimerSectionStyled = styled.section`
   background: linear-gradient(315deg, #2E325A 0%, #0E112A 100%);
   box-shadow: 50px 50px 100px 0 #121530, -50px -50px 100px 0px #272C5A;
   transition: transform 0.5s ease-in-out;
-  margin-block: 8rem;
+  margin-block: 10rem 8rem;
 
   @media (min-width: 768px) {
     transform: scale(1.5);
@@ -15,9 +15,8 @@ export const TimerSectionStyled = styled.section`
 export const FooterTimerStyled = styled.footer``
 
 export const AppStyled = styled.main`
-  flex: 1;
+  //flex: 1;
   display: flex;
-  justify-content: center;
   align-items: center;
   flex-direction: column;
 `
@@ -28,8 +27,9 @@ export const TimerLabel = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
 
-  h1 {
-    font-size: clamp(5rem, 3.4375rem + 5vw, 6.25rem);
+  h2 {
+    font-size: clamp(5rem, 4.6094rem + 1.25vw, 5.3125rem);
+    line-height: 6.1875rem;
   }
 
   span {
@@ -49,4 +49,9 @@ export const TimerButton = styled.button`
   border-color: transparent;
   background: #161932;
   transform: scale(.9);
+`
+export const Header = styled.header`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `

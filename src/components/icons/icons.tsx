@@ -1,46 +1,49 @@
 import { CircleIconStyled } from '@components/icons/icon.styled.tsx'
 import './icons.css'
-import { type RefObject, useRef } from 'react'
+import { type RefObject, useEffect, useRef } from 'react'
 
 interface Props {
   stroke: string
   currentTime: number
   time: number
+  isStart: boolean
 }
 
 export const CircleIcon = (props: Props) => {
-  const { stroke, time, currentTime } = props
+  const DEFAULT_DASH_ARRAY = '816.8140899333462 816.8140899333462'
+  const DEFAULT_DASH_OFFSET = '0'
+
+  const { time, currentTime, isStart } = props
   const circleElementRef = useRef<SVGCircleElement>(null)
 
-  function handleProgress (elementRef: RefObject<SVGCircleElement>) {
-    if (elementRef.current == null) {
-      return {
-        strokeDasharray: '816.8140899333462 816.8140899333462',
-        strokeDashoffset: '0'
-      }
+  useEffect(() => {
+    handleProgress(circleElementRef)
+  }, [currentTime])
+
+  const handleProgress = (element: RefObject<SVGCircleElement>) => {
+    if (element.current == null) return
+
+    const $element = circleElementRef.current as SVGCircleElement
+
+    if (!isStart) {
+      $element.style.strokeDasharray = DEFAULT_DASH_ARRAY
+      $element.style.strokeDashoffset = DEFAULT_DASH_OFFSET
+      return
     }
 
-    const $element = elementRef.current
     const radius = $element.getAttribute('r')
     const circumference = Number(radius) * 2 * Math.PI
 
     const percent = (currentTime / (time * 60)) * 100
     const offset = circumference - (percent / 100) * circumference
 
-    return {
-      strokeDasharray: `${circumference} ${circumference}`,
-      strokeDashoffset: `${offset}`
-    }
+    $element.style.strokeDasharray = `${circumference} ${circumference}`
+    $element.style.strokeDashoffset = `${offset}`
   }
-
-  const { strokeDasharray, strokeDashoffset } = handleProgress(circleElementRef)
 
   return (
     <>
       <CircleIconStyled
-        strokeDasharray={strokeDasharray}
-        strokeDashoffset={strokeDashoffset}
-        stroke={stroke}
         id="svg"
         height="277"
         width="277">
