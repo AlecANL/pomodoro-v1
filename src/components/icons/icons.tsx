@@ -3,7 +3,6 @@ import './icons.css'
 import { type RefObject, useEffect, useRef } from 'react'
 
 interface Props {
-  stroke: string
   currentTime: number
   time: number
   isStart: boolean

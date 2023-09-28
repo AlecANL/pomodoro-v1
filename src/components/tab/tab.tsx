@@ -10,7 +10,7 @@ interface Props {
 export const Tab = (props: Props) => {
   const { timeList, timeSelected, onChangeTime } = props
 
-  const getActiveClassName = (id: string) => timeSelected.id === id ? 'active' : ''
+  const getActiveClassName = (id: string) => timeSelected?.id === id ? 'active' : ''
 
   return (
     <>

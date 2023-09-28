@@ -4,10 +4,10 @@ export interface FormStateInterface {
   longBreak: FormStateValues
   font: FormStateValues
   color: FormStateValues
-
 }
 
 export interface FormStateValues {
   value: string | number
   isValid: boolean
+  id?: string
 }

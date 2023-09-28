@@ -1,55 +1,40 @@
 import { useEffect, useState } from 'react'
-import { type SettingItem, type Settings } from '@/models/time.interface.ts'
+import { type SettingItem } from '@/models/time.interface.ts'
 import { Modal } from '@components/modal/modal.tsx'
 import { SettingModal } from '@components/setting-modal/setting-modal.tsx'
-import { SETTING_CONTROLS } from '@/const/settings.const.ts'
 import { createPortal } from 'react-dom'
 import { AppStyled, FooterTimerStyled, Header, TimerButton, TimerLabel, TimerSectionStyled } from '@/app.styled.tsx'
 import { Button } from '@components/button/button.tsx'
 import { IconSetting } from '@components/icons/setting.tsx'
 import './index.css'
 import { CircleIcon } from '@components/icons/icons.tsx'
+import { useSettingsStore } from '@/store/settings.store.ts'
+import { usePomodoro } from '@/hooks/usePomodoro.ts'
 import { Tab } from '@components/tab/tab.tsx'
+import { getSelectedItem, getTime } from '@/utils/settings.util.ts'
 
 function App () {
-  const [state, setState] = useState<Settings[]>([])
+  const {
+    loadSettings,
+    settings,
+    colorSelected,
+    fontSelected,
+    timeSelected,
+    getTimeList,
+    setDefaultTimeSelected
+  } = useSettingsStore()
+  const timeList = getTimeList(settings)
+  const { time, changeTime, toggleStar, isRunning } = usePomodoro(timeSelected)
+
   const [openModal, setOpenModal] = useState(false)
-  const [timeSelected, setTimeSelected] = useState<SettingItem | null>(null)
-  const [colorSelected, setColorSelected] = useState<SettingItem | null>(null)
-  const [fontSelected, setFontColorSelected] = useState<SettingItem | null>(null)
-  const [currentTime, setCurrentTime] = useState(0)
-  const [start, setStart] = useState(false)
-  const currentStroke = '#535bf2'
 
-  const getStorageSettings = (state: Settings[]) => {
-    const key = '__pomodoro_settings__v1__'
-    const settings = localStorage.getItem(key)
-    return settings != null ? JSON.parse(settings) as Settings[] : state
-  }
+  useEffect(() => {
+    loadSettings()
+  }, [])
 
-  const getDefaultColor = (state: Settings[]) => {
-    return state.find(item => item.control === SETTING_CONTROLS.COLOR)?.items[0] as SettingItem
-  }
-
-  const getDefaultFont = (state: Settings[]) => {
-    return state.find(item => item.control === SETTING_CONTROLS.FONT)?.items[0] as SettingItem
-  }
-
-  const getTime = (time: number | string | null | undefined) => {
-    if (!time) return 0
-
-    return Number(time) * 60
-  }
-
-  const getTimeListSettings = (settings: Settings[]) => {
-    return settings.find(item => item.control === 'timeList')?.items ?? []
-  }
-
-  const getRawTime = (time: number | string | null | undefined) => {
-    if (!time) return 0
-
-    return Number(time)
-  }
+  useEffect(() => {
+    setDefaultTimeSelected(settings)
+  }, [settings])
 
   useEffect(() => {
     if (colorSelected != null) {
@@ -61,61 +46,9 @@ function App () {
     }
   }, [fontSelected, colorSelected])
 
-  const getCurrentTimeSelected = () => {
-    return timeSelected as SettingItem
-  }
-
-  useEffect(() => {
-    const getAppSettings = async () => {
-      const response = await fetch('src/data/settings.json')
-      return await (await response.json() as Promise<Settings[]>)
-    }
-
-    getAppSettings().then(data => {
-      setState(getStorageSettings(data))
-      setTimeSelected(data[0].items[0])
-      setCurrentTime(getTime(data[0].items[0].value))
-      setColorSelected(getDefaultColor(data))
-      setFontColorSelected(getDefaultFont(data))
-    })
-      .catch(error => {
-        console.log(error)
-      })
-  }, [])
-
-  useEffect(() => {
-    let interval: NodeJS.Timeout | null = null
-
-    if (start && currentTime === 0) {
-      setStart(false)
-      setCurrentTime(getTime(timeSelected?.value))
-      clearInterval(interval as unknown as NodeJS.Timeout)
-    }
-
-    if (start && currentTime > 0) {
-      interval = setInterval(() => {
-        setCurrentTime(prevState => prevState - 1)
-      }, 1000)
-    }
-
-    return () => {
-      if (interval != null) clearInterval(interval)
-    }
-  }, [start, currentTime])
-
-  const changeTime = (time: SettingItem) => {
-    setStart(false)
-    setTimeSelected(time)
-    setCurrentTime(getTime(time.value))
-  }
-
-  const toggleStar = () => {
-    setStart(prevState => !prevState)
-  }
-
   const timeoutLabel = () => {
-    const minutes = ('0' + String(Math.floor(currentTime / 60))).slice(-2)
-    const seconds = ('0' + String(Math.floor(currentTime % 60))).slice(-2)
+    const minutes = ('0' + String(Math.floor(time / 60))).slice(-2)
+    const seconds = ('0' + String(Math.floor(time % 60))).slice(-2)
     return `${minutes}:${seconds}`
   }
 
@@ -124,8 +57,8 @@ function App () {
   }
 
   const label = timeoutLabel()
-  const textLabel = start ? 'Pause' : 'Start'
-  const text = start && currentTime <= 0 ? 'Restart' : textLabel
+  const textLabel = isRunning ? 'Pause' : 'Start'
+  const text = isRunning && time <= 0 ? 'Restart' : textLabel
   const $modalContent = document.querySelector('#modal')
 
   return (
@@ -134,7 +67,7 @@ function App () {
         createPortal(
           <Modal isOpen={openModal} onClose={onCloseModal}>
             <SettingModal
-              settings={state}
+              settings={settings}
               currentColor={colorSelected as SettingItem}
               onClose={onCloseModal}
               currentFont={fontSelected as SettingItem}/>
@@ -145,7 +78,8 @@ function App () {
 
       <Header>
         <h1>Pomodoro</h1>
-        <Tab timeList={getTimeListSettings(state)} onChangeTime={changeTime} timeSelected={getCurrentTimeSelected()}/>
+        <Tab timeList={timeList} onChangeTime={changeTime}
+             timeSelected={getSelectedItem(timeSelected)}/>
       </Header>
 
       <AppStyled>
@@ -156,10 +90,9 @@ function App () {
               <span> {text} </span>
             </TimerLabel>
             <CircleIcon
-              currentTime={currentTime}
-              time={getRawTime(timeSelected?.value)}
-              stroke={currentStroke}
-              isStart={start}
+              currentTime={time}
+              time={getTime(timeSelected)}
+              isStart={isRunning}
             />
           </TimerButton>
         </TimerSectionStyled>

@@ -18,6 +18,7 @@ import { Button } from '@components/button/button.tsx'
 import { SETTING_CONTROLS } from '@/const/settings.const.ts'
 import { Input } from '@components/atoms/input'
 import { type FormStateInterface } from '@/models/form-state.interface.ts'
+import { useSettingsStore } from '@/store/settings.store.ts'
 
 interface Props {
   settings: Settings[]
@@ -27,39 +28,56 @@ interface Props {
 }
 
 export function SettingModal (props: Props) {
-  const [form, setForm] = useState<FormStateInterface>({
-    pomodoro: {
-      value: '25',
-      isValid: true
-    },
-    shortBreak: {
-      value: '5',
-      isValid: true
-    },
-    longBreak: {
-      value: '15',
-      isValid: true
-    },
-    font: {
-      value: '',
-      isValid: true
-    },
-    color: {
-      value: '',
-      isValid: true
-    }
-  })
+  const { currentColor, currentFont, settings, onClose } = props
+  const { setColorSelected, setFontSelected, setNewTime } = useSettingsStore()
+  const getFormInitialState = (settings: Settings[]): FormStateInterface => {
+    // storage
+    const timeList = settings.find(item => item.control === SETTING_CONTROLS.TIME)?.items ?? []
 
-  const { settings, onClose } = props
+    const timeObj: Record<string, { value: string, isValid: boolean, id: string }> = {}
+
+    timeList.forEach(item => {
+      timeObj[item.label ?? ''] = {
+        value: String(item.value),
+        isValid: true,
+        id: item.id
+      }
+    })
+
+    return {
+      ...timeObj,
+      color: {
+        value: currentColor.value,
+        isValid: true,
+        id: currentColor.id
+      },
+      font: {
+        value: currentFont.value,
+        isValid: true,
+        id: currentFont.id
+      }
+    } as FormStateInterface
+  }
+
+  const [form, setForm] = useState<FormStateInterface>(getFormInitialState(settings))
 
   const onSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault()
+
+    const isValidForm = Object.entries(form).every(([_, value]) => value.isValid)
+    if (!isValidForm) return
+
+    const { color, font, ...rest } = form
+    setColorSelected(color.id as string)
+    setFontSelected(font.id as string)
+    setNewTime(rest)
+    onClose()
   }
 
-  const validateFormValue = (value: number | string) => {
-    const currentValue = Number(value)
-    if (typeof value === 'string' && isNaN(currentValue)) return
+  const validateFormValue = (name: string, value: string) => {
+    if (name === 'color' || name === 'font') return true
 
+    const currentValue = Number(value)
     return !(currentValue <= 0 || currentValue > 60)
   }
 
@@ -70,13 +88,14 @@ export function SettingModal (props: Props) {
   }
 
   const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target
+    const { name, value, id } = event.target
 
     setForm({
       ...form,
       [name]: {
         value,
-        isValid: validateFormValue(value)
+        id,
+        isValid: validateFormValue(name, value)
       }
     })
   }
@@ -133,7 +152,13 @@ export function SettingModal (props: Props) {
                           setting.items.map(item => (
                             <div key={item.id}>
                               <label htmlFor={item.id}></label>
-                              <input id={item.id} value={item.value} type='radio'/>
+                              <Input
+                                name={'font'}
+                                value={item.value}
+                                checked={item.value === getFormValue('font')}
+                                onChange={onInputChange}
+                                id={item.id}
+                                type='radio'/>
                             </div>
                           ))
                         }
@@ -151,7 +176,13 @@ export function SettingModal (props: Props) {
                           setting.items.map(item => (
                             <div key={item.id}>
                               <label htmlFor={item.id}></label>
-                              <input id={item.id} value={item.value} type='radio'/>
+                              <Input
+                                name={'color'}
+                                value={item.value}
+                                onChange={onInputChange}
+                                checked={item.value === getFormValue('color')}
+                                id={item.id}
+                                type='radio'/>
                             </div>
                           ))
                         }
