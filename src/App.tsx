@@ -1,64 +1,29 @@
-import { useEffect, useState } from 'react'
-import { type SettingItem } from '@/models/time.interface.ts'
+import { createPortal } from 'react-dom'
 import { Modal } from '@components/modal/modal.tsx'
 import { SettingModal } from '@components/setting-modal/setting-modal.tsx'
-import { createPortal } from 'react-dom'
-import { AppStyled, FooterTimerStyled, Header, TimerButton, TimerLabel, TimerSectionStyled } from '@/app.styled.tsx'
 import { Button } from '@components/button/button.tsx'
 import { IconSetting } from '@components/icons/setting.tsx'
-import './index.css'
 import { CircleIcon } from '@components/icons/icons.tsx'
-import { useSettingsStore } from '@/store/settings.store.ts'
-import { usePomodoro } from '@/hooks/usePomodoro.ts'
 import { Tab } from '@components/tab/tab.tsx'
+import { usePomodoro } from '@/hooks/usePomodoro.ts'
+import { useInitApp } from '@/hooks/useInitApp.ts'
 import { getSelectedItem, getTime } from '@/utils/settings.util.ts'
+import { getPomodoroLabelStatus, getTimeoutLabel } from '@/utils/time.utils.ts'
+import { AppStyled, FooterTimerStyled, Header, TimerButton, TimerLabel, TimerSectionStyled } from '@/app.styled.tsx'
+import './index.css'
 
 function App () {
   const {
-    loadSettings,
-    settings,
-    colorSelected,
-    fontSelected,
+    timeList,
     timeSelected,
-    getTimeList,
-    setDefaultTimeSelected
-  } = useSettingsStore()
-  const timeList = getTimeList(settings)
+    settings,
+    openModal,
+    onCloseModal,
+    colorSelected,
+    fontSelected
+  } = useInitApp()
   const { time, changeTime, toggleStar, isRunning } = usePomodoro(timeSelected)
 
-  const [openModal, setOpenModal] = useState(false)
-
-  useEffect(() => {
-    loadSettings()
-  }, [])
-
-  useEffect(() => {
-    setDefaultTimeSelected(settings)
-  }, [settings])
-
-  useEffect(() => {
-    if (colorSelected != null) {
-      document.documentElement.style.setProperty('--current-color', `var(--${String(colorSelected.value)})`)
-    }
-
-    if (fontSelected != null) {
-      document.documentElement.style.setProperty('--currentFont', `${String(fontSelected.value)}`)
-    }
-  }, [fontSelected, colorSelected])
-
-  const timeoutLabel = () => {
-    const minutes = ('0' + String(Math.floor(time / 60))).slice(-2)
-    const seconds = ('0' + String(Math.floor(time % 60))).slice(-2)
-    return `${minutes}:${seconds}`
-  }
-
-  const onCloseModal = () => {
-    setOpenModal(prev => !prev)
-  }
-
-  const label = timeoutLabel()
-  const textLabel = isRunning ? 'Pause' : 'Start'
-  const text = isRunning && time <= 0 ? 'Restart' : textLabel
   const $modalContent = document.querySelector('#modal')
 
   return (
@@ -68,9 +33,9 @@ function App () {
           <Modal isOpen={openModal} onClose={onCloseModal}>
             <SettingModal
               settings={settings}
-              currentColor={colorSelected as SettingItem}
+              currentColor={colorSelected}
               onClose={onCloseModal}
-              currentFont={fontSelected as SettingItem}/>
+              currentFont={fontSelected}/>
           </Modal>,
           $modalContent as HTMLElement
         )
@@ -86,8 +51,8 @@ function App () {
         <TimerSectionStyled>
           <TimerButton onClick={toggleStar}>
             <TimerLabel>
-              <h2> {label} </h2>
-              <span> {text} </span>
+              <h2> {getTimeoutLabel(time)} </h2>
+              <span> {getPomodoroLabelStatus(isRunning, time)} </span>
             </TimerLabel>
             <CircleIcon
               currentTime={time}

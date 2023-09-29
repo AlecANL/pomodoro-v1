@@ -12,7 +12,6 @@ export const setDefaultFontSetting = (settings: Settings[]) => {
 }
 
 export const setDefaultTime = (settings: Settings[]) => {
-  console.log('settings', settings)
   const fontSetting = settings.find((setting) => setting.control === SETTING_CONTROLS.TIME)
   return fontSetting ? fontSetting.items[0] : null
 }
