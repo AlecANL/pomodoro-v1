@@ -2,9 +2,18 @@ import { create } from 'zustand'
 import { type ISettingState } from '@/models/settings-state.interface.ts'
 import { devtools, persist } from 'zustand/middleware'
 import { getAppSettings } from '@/services/settings.service.ts'
-import { getTimeSelected, setDefaultColorSetting, setDefaultFontSetting, setDefaultTime } from '@/utils/settings.util.ts'
+import {
+  changePomodoroTimeSettings,
+  getSettingById,
+  getTimeListSetting,
+  getTimeSelected,
+  setDefaultColorSetting,
+  setDefaultFontSetting,
+  setDefaultTime
+} from '@/utils/settings.util.ts'
 import { type SettingItem, type Settings } from '@/models/time.interface.ts'
 import { SETTING_CONTROLS } from '@/const/settings.const.ts'
+import { type TimeFormState } from '@/models/form-state.interface.ts'
 
 export const useSettingsStore = create<ISettingState>()(devtools(persist((set, get) => ({
   settings: [],
@@ -20,7 +29,7 @@ export const useSettingsStore = create<ISettingState>()(devtools(persist((set, g
     set(() => ({ settings: settingsToUse, colorSelected: colorToUse, fontSelected: fontToUSe }), false, 'LOAD_SETTINGS')
   },
   getTimeList: (settings: Settings[]) => {
-    return settings.find((setting) => setting.control === SETTING_CONTROLS.TIME)?.items ?? [] as SettingItem[]
+    return getTimeListSetting(settings)
   },
   setDefaultTimeSelected: (settings: Settings[]) => {
     const timeSelected = setDefaultTime(settings)
@@ -31,35 +40,23 @@ export const useSettingsStore = create<ISettingState>()(devtools(persist((set, g
   },
   setColorSelected: (idColor: string) => {
     const { settings } = get()
-    const foundColor = settings.find((setting) => setting.control === SETTING_CONTROLS.COLOR)?.items.find((item) => item.id === idColor)
+    const foundColor = getSettingById({ id: idColor, settings, control: SETTING_CONTROLS.COLOR })
     set(() => ({ colorSelected: foundColor }), false, 'SET_COLOR_SELECTED')
   },
   setFontSelected: (idFont: string) => {
     const { settings } = get()
-    const foundFont = settings.find((setting) => setting.control === SETTING_CONTROLS.FONT)?.items.find((item) => item.id === idFont)
+    const foundFont = getSettingById({ id: idFont, settings, control: SETTING_CONTROLS.FONT })
     set(() => ({ fontSelected: foundFont }), false, 'SET_FONT_SELECTED')
   },
-  setNewTime: (x: any) => {
+  setNewTime: (formValues: TimeFormState) => {
     const { settings } = get()
-    const newSettings = settings.map(setting => {
-      if (setting.control === SETTING_CONTROLS.TIME) {
-        return {
-          ...setting,
-          items: setting.items.map(item => {
-            if (item.id === x[item.label ?? ''].id) {
-              return {
-                ...item,
-                value: Number(x[item.label ?? ''].value)
-              }
-            }
-            return item
-          })
-        }
-      }
-      return setting
-    })
+    const newSettings = changePomodoroTimeSettings(settings, formValues)
 
     set(() => ({ settings: newSettings }), false, 'SET_NEW_TIME')
+  },
+  getCurrentTimeList: () => {
+    const { settings } = get()
+    return getTimeListSetting(settings)
   }
 }), {
   name: 'settings-store'

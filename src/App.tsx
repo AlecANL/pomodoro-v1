@@ -18,9 +18,7 @@ function App () {
     timeSelected,
     settings,
     openModal,
-    onCloseModal,
-    colorSelected,
-    fontSelected
+    onCloseModal
   } = useInitApp()
   const { time, changeTime, toggleStar, isRunning } = usePomodoro(timeSelected)
 
@@ -33,9 +31,7 @@ function App () {
           <Modal isOpen={openModal} onClose={onCloseModal}>
             <SettingModal
               settings={settings}
-              currentColor={colorSelected}
-              onClose={onCloseModal}
-              currentFont={fontSelected}/>
+              onClose={onCloseModal}/>
           </Modal>,
           $modalContent as HTMLElement
         )
