@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { from } from '@/utils.styled.tsx'
+import { from } from '@/styles/utils.styled.tsx'
 
 export const ModalWrapper = styled.div`
   color: var(--haiti);

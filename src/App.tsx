@@ -1,15 +1,23 @@
 import { createPortal } from 'react-dom'
-import { Modal } from '@components/modal/modal.tsx'
-import { SettingModal } from '@components/setting-modal/setting-modal.tsx'
-import { Button } from '@components/button/button.tsx'
-import { IconSetting } from '@components/icons/setting.tsx'
-import { CircleIcon } from '@components/icons/icons.tsx'
-import { Tab } from '@components/tab/tab.tsx'
+
+import { Modal } from '@components/molecules/modal'
+import { SettingModal } from '@components/organism/setting-modal'
+import { Tab } from '@components/molecules/tab'
+import { Button } from '@components/atoms/button'
+import { IconSetting } from '@components/atoms/icons'
+import { ProgressCircle } from '@components/atoms/progress-circle'
 import { usePomodoro } from '@/hooks/usePomodoro.ts'
 import { useInitApp } from '@/hooks/useInitApp.ts'
-import { getSelectedItem, getTime } from '@/utils/settings.util.ts'
+import { getTimeSelected } from '@/utils/settings.util.ts'
 import { getPomodoroLabelStatus, getTimeoutLabel } from '@/utils/time.utils.ts'
-import { AppStyled, FooterTimerStyled, Header, TimerButton, TimerLabel, TimerSectionStyled } from '@/app.styled.tsx'
+import {
+  AppStyled,
+  FooterTimerStyled,
+  Header,
+  TimerButton,
+  TimerLabel,
+  TimerSectionStyled
+} from '@/styles/app.styled.tsx'
 import './index.css'
 
 function App () {
@@ -23,6 +31,10 @@ function App () {
   const { time, changeTime, toggleStar, isRunning } = usePomodoro(timeSelected)
 
   const $modalContent = document.querySelector('#modal')
+  const rawTime = getTimeSelected({
+    timeSelected,
+    useRawValue: true
+  })
 
   return (
     <>
@@ -40,7 +52,7 @@ function App () {
       <Header>
         <h1>Pomodoro</h1>
         <Tab timeList={timeList} onChangeTime={changeTime}
-             timeSelected={getSelectedItem(timeSelected)}/>
+             timeSelected={timeSelected}/>
       </Header>
 
       <AppStyled>
@@ -50,9 +62,9 @@ function App () {
               <h2> {getTimeoutLabel(time)} </h2>
               <span> {getPomodoroLabelStatus(isRunning, time)} </span>
             </TimerLabel>
-            <CircleIcon
+            <ProgressCircle
               currentTime={time}
-              time={getTime(timeSelected)}
+              time={rawTime}
               isStart={isRunning}
             />
           </TimerButton>

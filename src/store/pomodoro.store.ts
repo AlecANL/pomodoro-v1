@@ -1,20 +1,25 @@
 import { create } from 'zustand'
 import { devtools } from 'zustand/middleware'
-import { type PomodoroState } from '@/models/pomodoro-state.interface.ts'
+import { POMODORO_ACTIONS_TYPES, type PomodoroState } from '@/models/pomodoro-state.interface.ts'
 import { type SettingItem } from '@/models/time.interface.ts'
-import { getTimeSelected } from '@/utils/settings.util.ts'
+import { getChangedTime, getTimeSelected } from '@/utils/settings.util.ts'
+import { SWITCH_TURN_POMODORO, ZERO_TIME } from '@/const/settings.const.ts'
 
 export const usePomodoroStore = create<PomodoroState>()(devtools((set) => ({
-  time: 0,
-  isRunning: false,
+  time: ZERO_TIME,
+  isRunning: SWITCH_TURN_POMODORO.OFF,
   toggleRunning: (value: boolean) => {
-    set(() => ({ isRunning: value }), false, 'TOGGLE_RUNNING')
+    set(() => ({ isRunning: value }), false, POMODORO_ACTIONS_TYPES.TOGGLE_RUNNING)
   },
   setTime: (time: number) => {
-    set(() => ({ time: time - 1 }), false, 'SET_TIME')
+    set(() => ({ time: getChangedTime(time) }), false, POMODORO_ACTIONS_TYPES.SET_TIME)
   },
   setTimeValue: (timeSelected: SettingItem | null) => {
-    set(() => ({ time: getTimeSelected(timeSelected) }), false, 'SET_INITIAL_TIME')
+    set(() => ({
+      time: getTimeSelected({
+        timeSelected: timeSelected as SettingItem
+      })
+    }), false, POMODORO_ACTIONS_TYPES.SET_INITIAL_TIME)
   }
 }), {
   name: 'pomodoro-store'

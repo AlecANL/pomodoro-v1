@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useSettingsStore } from '@/store/settings.store.ts'
 import { type SettingItem } from '@/models/time.interface.ts'
+import { SWITCH_SHOW_MODAL } from '@/const/settings.const.ts'
 
 export function useInitApp () {
   const {
@@ -13,7 +14,7 @@ export function useInitApp () {
     timeSelected
   } = useSettingsStore()
   const timeList = getTimeList(settings)
-  const [openModal, setOpenModal] = useState(false)
+  const [openModal, setOpenModal] = useState(SWITCH_SHOW_MODAL.HIDE)
 
   useEffect(() => {
     loadSettings()

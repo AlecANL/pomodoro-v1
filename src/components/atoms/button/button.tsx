@@ -1,4 +1,4 @@
-import { ButtonStyled } from '@components/button/button.styled.tsx'
+import { ButtonStyled } from '@components/atoms/button/button.styled.tsx'
 import { type ButtonHTMLAttributes } from 'react'
 import { BUTTON_VARIANTS, type ButtonVariant } from '@/const/button.const.ts'
 

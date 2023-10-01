@@ -12,9 +12,9 @@ import {
   ModalSettingHeader,
   ModalSettingTitle,
   ModalWrapper
-} from './setting-modal.styled'
-import { IconClose } from '@components/icons/setting.tsx'
-import { Button } from '@components/button/button.tsx'
+} from './setting-modal.styled.tsx'
+import { IconClose } from '@components/atoms/icons/icons.tsx'
+import { Button } from '@components/atoms/button/button.tsx'
 import { SETTING_CONTROLS } from '@/const/settings.const.ts'
 import { Input } from '@components/atoms/input'
 import { useSettingModal } from '@/hooks/useSettingModal.ts'

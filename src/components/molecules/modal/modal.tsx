@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
+import { useModal } from '@/hooks/useModal.ts'
 
 interface Props {
   children?: React.ReactNode
@@ -9,40 +10,10 @@ interface Props {
 
 export function Modal (props: Props) {
   const { children, isOpen, onClose } = props
-
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden'
-      document.addEventListener('keydown', handleKeyDown)
-      document.addEventListener('mousedown', handleClickOutside)
-    }
-
-    return () => {
-      document.body.style.overflow = 'auto'
-      document.removeEventListener('keydown', handleKeyDown)
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [isOpen])
-
-  const handleKeyDown = (event: KeyboardEvent) => {
-    if (event.key === 'Escape') {
-      closeModal()
-    }
-  }
-
-  const handleClickOutside = (event: MouseEvent) => {
-    if (!(event.target instanceof HTMLElement)) return
-
-    if (event.target.classList.contains('modal-overlay')) {
-      closeModal()
-    }
-  }
-
-  const closeModal = () => {
-    setTimeout(() => {
-      onClose()
-    }, 100)
-  }
+  useModal({
+    isOpen,
+    onClose
+  })
 
   return (
     <AnimatePresence>

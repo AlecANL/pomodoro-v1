@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-export const IconSettingStyled = styled.svg``
+const IconSettingStyled = styled.svg``
 
 export const IconSetting = () => {
   return (
