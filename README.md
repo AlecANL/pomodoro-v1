@@ -29,7 +29,7 @@ Your users should be able to:
 ### Links
 
 - Solution URL: [repo](https://github.com/AlecANL/pomodoro-v1)
-- Live Site URL: [live demo](https://pomodoro-app-v2.netlify.app/)
+- Live Site URL: [live demo](https://pomodoro-v1.vercel.app)
 
 ## My process
 

@@ -1,4 +1,4 @@
-import settingsJson from '@/data/settings.json'
+import settingsJson from '../../public/data/settings.json'
 import { type SettingItem, type Settings } from '@/models/time.interface.ts'
 import {
   SETTING_CONTROLS,
