@@ -8,7 +8,7 @@ interface Props {
   onClose: () => void
 }
 
-export function Modal (props: Props) {
+export default function Modal (props: Props) {
   const { children, isOpen, onClose } = props
   useModal({
     isOpen,

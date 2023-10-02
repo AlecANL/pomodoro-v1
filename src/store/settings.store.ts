@@ -20,6 +20,7 @@ export const useSettingsStore = create<ISettingState>()(devtools(persist((set, g
   colorSelected: null,
   fontSelected: null,
   timeSelected: null,
+  isSoundOff: false,
   loadSettings: async () => {
     const { colorSelected, fontSelected, settings } = get()
     const settingsResponse = await getAppSettings()
@@ -72,6 +73,10 @@ export const useSettingsStore = create<ISettingState>()(devtools(persist((set, g
   getCurrentTimeList: () => {
     const { settings } = get()
     return getTimeListSetting(settings)
+  },
+  setSoundStatus: () => {
+    const { isSoundOff } = get()
+    set(() => ({ isSoundOff: !isSoundOff }), false, SETTING_ACTIONS_TYPES.SET_SOUND_STATUS)
   }
 }), {
   name: SETTING_STATE_KEY_NAME

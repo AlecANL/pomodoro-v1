@@ -15,6 +15,8 @@ export interface ISettingState {
   setColorSelected: (idColor: string) => void
   setFontSelected: (idFont: string) => void
   setNewTime: (formValues: TimeFormState) => void
+  isSoundOff: boolean
+  setSoundStatus: () => void
 }
 
 export const SETTING_STATE_KEY_NAME = '__v1__pomodoro_settings__'
@@ -25,7 +27,8 @@ export const SETTING_ACTIONS_TYPES = {
   CHANGE_TIME_SELECTED: 'CHANGE_TIME_SELECTED',
   SET_COLOR_SELECTED: 'SET_COLOR_SELECTED',
   SET_FONT_SELECTED: 'SET_FONT_SELECTED',
-  SET_NEW_TIME: 'SET_NEW_TIME'
+  SET_NEW_TIME: 'SET_NEW_TIME',
+  SET_SOUND_STATUS: 'SET_SOUND_STATUS'
 } as const
 
 export type SettingItemType = SettingItem | null

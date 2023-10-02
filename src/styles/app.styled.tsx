@@ -15,7 +15,6 @@ export const TimerSectionStyled = styled.section`
 export const FooterTimerStyled = styled.footer``
 
 export const AppStyled = styled.main`
-  //flex: 1;
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -28,7 +27,7 @@ export const TimerLabel = styled.div`
   transform: translate(-50%, -50%);
 
   h2 {
-    font-size: clamp(5rem, 4.6094rem + 1.25vw, 5.3125rem);
+    font-size: clamp(5rem, 4.6094rem + 0.25vw, 5.3125rem);
     line-height: 6.1875rem;
   }
 

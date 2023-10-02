@@ -11,7 +11,8 @@ export function useInitApp () {
     setDefaultTimeSelected,
     colorSelected,
     fontSelected,
-    timeSelected
+    timeSelected,
+    isSoundOff
   } = useSettingsStore()
   const timeList = getTimeList(settings)
   const [openModal, setOpenModal] = useState(SWITCH_SHOW_MODAL.HIDE)
@@ -45,6 +46,7 @@ export function useInitApp () {
     fontSelected: fontSelected as SettingItem,
     openModal,
     onCloseModal,
-    timeSelected
+    timeSelected,
+    isSoundOff
   }
 }

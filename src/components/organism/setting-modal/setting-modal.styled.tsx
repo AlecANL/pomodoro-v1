@@ -74,6 +74,10 @@ export const ModalFormInputItem = styled.div`
     color: var(--manatee);
   }
 
+  span {
+    color: var(--radical-red);
+  }
+
   ${from('x')`
     display: flex;
     flex-direction: column;
@@ -158,4 +162,91 @@ export const ModalFormRadioControlGroup = styled.div`
   display: flex;
   justify-content: center;
   gap: 1rem;
+`
+
+export const ModalFormColorControlItems = styled.div`
+  position: relative;
+
+  input {
+    position: absolute;
+    min-height: 0;
+    visibility: hidden;
+  }
+`
+
+export const ModalFormColorLabel = styled.label<{
+  color: string
+}>`
+  position: relative;
+  display: block;
+  min-width: 50px;
+  min-height: 50px;
+  border-radius: 100%;
+
+  svg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  &:hover {
+    outline: 1px solid var(--selago);
+  }
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 40px;
+    min-height: 40px;
+    background-color: var(--${props => props.color});
+    border-radius: 100%;
+  }
+`
+
+export const ModalFormFontLabel = styled.label`
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 50px;
+  min-height: 50px;
+  border-radius: 100%;
+  font-size: 1rem;
+  isolation: isolate;
+  color: hsla(233, 14%, 35%, 1.00);
+
+
+  &:hover {
+    outline: 1px solid var(--selago);
+  }
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 40px;
+    min-height: 40px;
+    background-color: var(--selago);
+    border-radius: 100%;
+    z-index: -1;
+  }
+
+  &.active:before {
+    background-color: var(--haiti);
+  }
+
+  &.active {
+    color: var(--white);
+  }
+`
+export const TooltipContainer = styled.div`
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 `

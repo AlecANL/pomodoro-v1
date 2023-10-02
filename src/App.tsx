@@ -1,7 +1,5 @@
 import { createPortal } from 'react-dom'
 
-import { Modal } from '@components/molecules/modal'
-import { SettingModal } from '@components/organism/setting-modal'
 import { Tab } from '@components/molecules/tab'
 import { Button } from '@components/atoms/button'
 import { IconSetting } from '@components/atoms/icons'
@@ -19,6 +17,10 @@ import {
   TimerSectionStyled
 } from '@/styles/app.styled.tsx'
 import './index.css'
+import { lazy, Suspense } from 'react'
+
+const ModalLazy = lazy(() => import('@components/molecules/modal/modal.tsx'))
+const SettingModalLazy = lazy(() => import('@components/organism/setting-modal/setting-modal.tsx'))
 
 function App () {
   const {
@@ -26,9 +28,10 @@ function App () {
     timeSelected,
     settings,
     openModal,
-    onCloseModal
+    onCloseModal,
+    isSoundOff
   } = useInitApp()
-  const { time, changeTime, toggleStar, isRunning } = usePomodoro(timeSelected)
+  const { time, changeTime, toggleStar, isRunning } = usePomodoro(timeSelected, isSoundOff)
 
   const $modalContent = document.querySelector('#modal')
   const rawTime = getTimeSelected({
@@ -40,11 +43,13 @@ function App () {
     <>
       {
         createPortal(
-          <Modal isOpen={openModal} onClose={onCloseModal}>
-            <SettingModal
-              settings={settings}
-              onClose={onCloseModal}/>
-          </Modal>,
+          <Suspense fallback={null}>
+            <ModalLazy isOpen={openModal} onClose={onCloseModal}>
+              <SettingModalLazy
+                settings={settings}
+                onClose={onCloseModal}/>
+            </ModalLazy>
+          </Suspense>,
           $modalContent as HTMLElement
         )
       }
@@ -72,11 +77,10 @@ function App () {
       </AppStyled>
 
       <FooterTimerStyled>
-        <Button onClick={onCloseModal}>
+        <Button aria-label='button open settings modal' onClick={onCloseModal}>
           <IconSetting/>
         </Button>
       </FooterTimerStyled>
-
     </>
   )
 }

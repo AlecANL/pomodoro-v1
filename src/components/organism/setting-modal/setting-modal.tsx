@@ -4,27 +4,32 @@ import {
   ModalControlTitle,
   ModalForm,
   ModalFormColorControl,
+  ModalFormColorControlItems,
+  ModalFormColorLabel,
   ModalFormFontControl,
+  ModalFormFontLabel,
   ModalFormInputControl,
   ModalFormInputControlGroup,
   ModalFormInputItem,
   ModalFormRadioControlGroup,
   ModalSettingHeader,
   ModalSettingTitle,
-  ModalWrapper
+  ModalWrapper,
+  TooltipContainer
 } from './setting-modal.styled.tsx'
-import { IconClose } from '@components/atoms/icons/icons.tsx'
+import { IconCheck, IconClose } from '@components/atoms/icons/icons.tsx'
 import { Button } from '@components/atoms/button/button.tsx'
 import { SETTING_CONTROLS } from '@/const/settings.const.ts'
 import { Input } from '@components/atoms/input'
 import { useSettingModal } from '@/hooks/useSettingModal.ts'
+import { Tooltip } from '@components/atoms/tooltip/tooltip.tsx'
 
 interface Props {
   settings: Settings[]
   onClose: () => void
 }
 
-export function SettingModal (props: Props) {
+export default function SettingModal (props: Props) {
   const { settings, onClose } = props
   const { onSubmit, isControlValid, onInputChange, getFormValue } = useSettingModal({
     onClose
@@ -58,7 +63,9 @@ export function SettingModal (props: Props) {
                                 value={getFormValue(item.label)}
                                 onChange={onInputChange}
                                 id={item.id} type='number'>
-                                {!isControlValid(item.label) && 'Invalid value'}
+                                {!isControlValid(item.label)
+                                  ? <span>Invalid value. max: 60min and min: 1min</span>
+                                  : null}
                               </Input>
                             </ModalFormInputItem>
                           ))
@@ -69,21 +76,39 @@ export function SettingModal (props: Props) {
                 }
                 {
                   setting.control === SETTING_CONTROLS.FONT && (
-                    <ModalFormFontControl>
-                      <ModalControlTitle>{setting.name}</ModalControlTitle>
-                      <ModalFormRadioControlGroup>
+                    <ModalFormFontControl aria-label='font-content'>
+                      <ModalControlTitle id='font-section'>{setting.name}</ModalControlTitle>
+                      <ModalFormRadioControlGroup aria-labelledby="font-section">
                         {
-                          setting.items.map(item => (
-                            <div key={item.id}>
-                              <label htmlFor={item.id}></label>
+                          setting.items.map((item) => (
+                            <ModalFormColorControlItems key={item.id} aria-label={item.name}>
+                              <ModalFormFontLabel
+                                aria-label={item.name}
+                                style={{
+                                  fontFamily: item.value as string
+                                }}
+                                className={`${item.value === getFormValue('font') ? 'active' : ''}`}
+                                htmlFor={item.id}>
+                                <span aria-hidden={true}>Aa</span>
+                              </ModalFormFontLabel>
                               <Input
                                 name={'font'}
+                                aria-labelledby={'font'}
                                 value={item.value}
                                 checked={item.value === getFormValue('font')}
                                 onChange={onInputChange}
                                 id={item.id}
                                 type='radio'/>
-                            </div>
+                              {
+                                item.value === getFormValue('font')
+                                  ? (
+                                    <TooltipContainer>
+                                      <Tooltip show={item.value === getFormValue('font')}>{item.name}</Tooltip>
+                                    </TooltipContainer>
+                                    )
+                                  : null
+                              }
+                            </ModalFormColorControlItems>
                           ))
                         }
                       </ModalFormRadioControlGroup>
@@ -98,16 +123,32 @@ export function SettingModal (props: Props) {
                       <ModalFormRadioControlGroup>
                         {
                           setting.items.map(item => (
-                            <div key={item.id}>
-                              <label htmlFor={item.id}></label>
+                            <ModalFormColorControlItems key={item.id} aria-label={item.name}>
+                              <ModalFormColorLabel color={item.value as string} htmlFor={item.id}>
+                                {
+                                  item.value === getFormValue('color')
+                                    ? <IconCheck/>
+                                    : null
+                                }
+                              </ModalFormColorLabel>
                               <Input
                                 name={'color'}
+                                aria-labelledby={'color'}
                                 value={item.value}
                                 onChange={onInputChange}
                                 checked={item.value === getFormValue('color')}
                                 id={item.id}
                                 type='radio'/>
-                            </div>
+                              {
+                                item.value === getFormValue('color')
+                                  ? (
+                                    <TooltipContainer>
+                                      <Tooltip show={item.value === getFormValue('color')}>{item.name}</Tooltip>
+                                    </TooltipContainer>
+                                    )
+                                  : null
+                              }
+                            </ModalFormColorControlItems>
                           ))
                         }
                       </ModalFormRadioControlGroup>
