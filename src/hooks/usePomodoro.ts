@@ -8,6 +8,7 @@ import { getTimeoutLabel } from '@/utils/time.utils.ts'
 import clickSound from '@/assets/sounds/tap.wav'
 import alertSound from '@/assets/sounds/clock-alarm-8761.mp3'
 import switchSound from '@/assets/sounds/click.wav'
+// @ts-expect-error
 import useSound from 'use-sound'
 
 export function usePomodoro (timeSelected: SettingItem | null, mutedAudio = false) {

@@ -34,5 +34,6 @@ module.exports = {
         "@typescript-eslint/strict-boolean-expressions": "off",
         "@typescript-eslint/no-floating-promises": "off",
         "@typescript-eslint/promise-function-async": "off",
+        "@typescript-eslint/ban-ts-comment": "off",
     }
 }

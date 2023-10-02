@@ -28,7 +28,7 @@ Your users should be able to:
 
 ### Links
 
-- Solution URL: [repo](https://github.com/AlecANL/pomodoro-app-v2)
+- Solution URL: [repo](https://github.com/AlecANL/pomodoro-v1)
 - Live Site URL: [live demo](https://pomodoro-app-v2.netlify.app/)
 
 ## My process
@@ -41,6 +41,5 @@ Your users should be able to:
 
 ## Author
 
-- Website - [portfolio](https://alec-portfolio-dev.vercel.app/)
 - Frontend Mentor - [@alecanl](https://www.frontendmentor.io/profile/alecanl)
 - Twitter - [@alecanl](https://www.twitter.com/alecanl)
