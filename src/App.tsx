@@ -62,10 +62,10 @@ function App () {
 
       <AppStyled>
         <TimerSectionStyled>
-          <TimerButton onClick={toggleStar}>
+          <TimerButton data-testid='timeButton' onClick={toggleStar}>
             <TimerLabel>
-              <h2> {getTimeoutLabel(time)} </h2>
-              <span> {getPomodoroLabelStatus(isRunning, time)} </span>
+              <h2 data-testid='timePlaceholdert'> {getTimeoutLabel(time)} </h2>
+              <span data-testid='pomodoroStatus'> {getPomodoroLabelStatus(isRunning, time)} </span>
             </TimerLabel>
             <ProgressCircle
               currentTime={time}
@@ -77,7 +77,7 @@ function App () {
       </AppStyled>
 
       <FooterTimerStyled>
-        <Button aria-label='button open settings modal' onClick={onCloseModal}>
+        <Button data-testid='settingsButton' aria-label='button open settings modal' onClick={onCloseModal}>
           <IconSetting/>
         </Button>
       </FooterTimerStyled>

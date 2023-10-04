@@ -15,6 +15,7 @@ module.exports = {
             "files": [
                 ".eslintrc.{js,cjs}"
             ],
+
             "parserOptions": {
                 "sourceType": "script"
             }
@@ -28,6 +29,7 @@ module.exports = {
     "plugins": [
         "react"
     ],
+    parser: '@typescript-eslint/parser',
     "rules": {
         "@typescript-eslint/explicit-function-return-type": "off",
         "react/react-in-jsx-scope": "off",

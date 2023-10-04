@@ -18,7 +18,7 @@ export const Tab = (props: Props) => {
         {
           timeList.map(time => (
             <TabItem className={getActiveClassName(time.id, timeSelected)} key={time.id}>
-              <button onClick={() => {
+              <button data-testid={`tab-${time.label}`} onClick={() => {
                 onChangeTime(time)
               }}>
                 <span>{time.name}</span>

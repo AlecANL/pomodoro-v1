@@ -59,12 +59,15 @@ export default function SettingModal (props: Props) {
                             <ModalFormInputItem key={item.id}>
                               <label htmlFor={item.id}>{item.name}</label>
                               <Input
+                                data-testid={`input-${item.label}`}
                                 name={item.label}
                                 value={getFormValue(item.label)}
                                 onChange={onInputChange}
                                 id={item.id} type='number'>
                                 {!isControlValid(item.label)
-                                  ? <span>Invalid value. max: 60min and min: 1min</span>
+                                  ? <span
+                                    className='error-message'
+                                    data-testid={`error-input-${item.label}`}>Invalid value. max: 60min and min: 1min</span>
                                   : null}
                               </Input>
                             </ModalFormInputItem>
@@ -124,7 +127,9 @@ export default function SettingModal (props: Props) {
                         {
                           setting.items.map(item => (
                             <ModalFormColorControlItems key={item.id} aria-label={item.name}>
-                              <ModalFormColorLabel color={item.value as string} htmlFor={item.id}>
+                              <ModalFormColorLabel
+                                data-testid={`input-${item.value}`}
+                                color={item.value as string} htmlFor={item.id}>
                                 {
                                   item.value === getFormValue('color')
                                     ? <IconCheck/>
@@ -159,7 +164,7 @@ export default function SettingModal (props: Props) {
             ))
           }
 
-          <Button variant={'custom'}>Apply</Button>
+          <Button data-testid='apply-button' variant={'custom'}>Apply</Button>
         </ModalForm>
       </ModalWrapper>
     </>
